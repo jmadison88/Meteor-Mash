@@ -26,6 +26,8 @@ class GameScene: SKScene {
             let moveLoop = SKAction.sequence([moveDown, moveReset])
             let moveForever = SKAction.repeatForever(moveLoop)
             spaceBackground.run(moveForever)
+                
+            
         }
     }
 }

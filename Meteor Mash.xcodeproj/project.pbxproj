@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2D28D40129E99BD300B42849 /* Level.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D28D40029E99BD300B42849 /* Level.swift */; };
 		460C2EF629E87578006B30FC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460C2EF529E87578006B30FC /* AppDelegate.swift */; };
 		460C2EF829E87578006B30FC /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 460C2EF729E87578006B30FC /* GameScene.sks */; };
 		460C2EFA29E87578006B30FC /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = 460C2EF929E87578006B30FC /* Actions.sks */; };
@@ -18,6 +19,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2D28D40029E99BD300B42849 /* Level.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Level.swift; sourceTree = "<group>"; };
 		460C2EF229E87578006B30FC /* Meteor Mash.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Meteor Mash.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		460C2EF529E87578006B30FC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		460C2EF729E87578006B30FC /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -63,6 +65,7 @@
 				460C2EF729E87578006B30FC /* GameScene.sks */,
 				460C2EF929E87578006B30FC /* Actions.sks */,
 				460C2EFB29E87578006B30FC /* GameScene.swift */,
+				2D28D40029E99BD300B42849 /* Level.swift */,
 				460C2EFD29E87578006B30FC /* GameViewController.swift */,
 				460C2EFF29E87578006B30FC /* Main.storyboard */,
 				460C2F0229E8757A006B30FC /* Assets.xcassets */,
@@ -146,6 +149,7 @@
 			files = (
 				460C2EFC29E87578006B30FC /* GameScene.swift in Sources */,
 				460C2EFE29E87578006B30FC /* GameViewController.swift in Sources */,
+				2D28D40129E99BD300B42849 /* Level.swift in Sources */,
 				460C2EF629E87578006B30FC /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
