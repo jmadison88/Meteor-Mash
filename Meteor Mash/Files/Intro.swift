@@ -93,9 +93,9 @@ class Intro: SKScene {
                 self.view?.presentScene(scene!, transition: transition)
             }
             if touchedNode.name == "scoreButton" {
-                let scene2 = Scores(fileNamed: "Scores")!
-                let transition2 = SKTransition.moveIn(with: .right, duration: 1)
-                self.view?.presentScene(scene2, transition: transition2)
+                let scene = Scores(fileNamed: "Scores")
+                let transition = SKTransition.moveIn(with: .left, duration: 3)
+                self.view?.presentScene(scene!, transition: transition)
             }
         }
     }
