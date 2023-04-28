@@ -11,10 +11,10 @@ import GameplayKit
 class Level: SKScene, SKPhysicsContactDelegate {
     
     var turret = SKSpriteNode()
+    var laser = SKSpriteNode()
     var aliens = [SKSpriteNode]()
     var alien = SKSpriteNode()
     var meteor = SKSpriteNode()
-    var laser = SKSpriteNode()
     var backButton = SKSpriteNode()
     var shootButton = SKSpriteNode()
     var leftButton = SKSpriteNode()
@@ -24,6 +24,7 @@ class Level: SKScene, SKPhysicsContactDelegate {
     var points = 0
     var isTouching = false
     var moving = false
+    var isPlaying = false
     
     override func didMove(to view: SKView) {
         physicsWorld.contactDelegate = self
@@ -63,7 +64,7 @@ class Level: SKScene, SKPhysicsContactDelegate {
         let FireButton = SKTexture(imageNamed: "FireButton")
         shootButton = SKSpriteNode(texture: FireButton, size: CGSize(width: 100, height: 100))
         shootButton.position = CGPoint(x: frame.midX + 340, y: frame.midY - 115)
-        shootButton.name = "fireButton"
+        shootButton.name = "FireButton"
         shootButton.zPosition = -2
         shootButton.alpha = 0.2
         addChild(shootButton)
@@ -89,6 +90,17 @@ class Level: SKScene, SKPhysicsContactDelegate {
         
     }
     
+    func createLaser() {
+        let greenLaser = SKTexture(imageNamed: "Laser")
+        laser = SKSpriteNode(texture: greenLaser, size: CGSize(width: 10, height: 50))
+        laser.physicsBody = SKPhysicsBody(circleOfRadius: 10)
+        laser.physicsBody?.isDynamic = false
+        laser.physicsBody?.usesPreciseCollisionDetection = true
+        turret.position = CGPoint(x: frame.midX, y: frame.midY - 100)
+        laser.zPosition = -3
+        addChild(laser)
+    }
+    
     func createTurret() {
         turret.removeFromParent()
         let character = SKTexture(imageNamed: "Turret")
@@ -97,9 +109,6 @@ class Level: SKScene, SKPhysicsContactDelegate {
         turret.zPosition = -3
         turret.physicsBody = SKPhysicsBody(rectangleOf: turret.size)
         turret.physicsBody? .isDynamic = false
-        func walk(force: CGFloat) {
-            self.physicsBody?.applyForce(CGVector(dx: force, dy: 0.0))
-        }
         addChild(turret)
     }
     
@@ -110,10 +119,32 @@ class Level: SKScene, SKPhysicsContactDelegate {
         aliens.append(alien)
     }
     
+    func choosePosition() {
+        let pick = arc4random_uniform(10) + 1
+        if pick > 7 {
+            meteor.position = CGPoint(x: frame.midX - 250, y: frame.maxY)
+        }
+        else if pick > 4 {
+            meteor.position = CGPoint(x: frame.midX, y: frame.maxY)
+        }
+        else {
+            meteor.position = CGPoint(x: frame.midX + 250, y: frame.maxY)
+        }
+    }
+    
+    func updateHazard()
+    {
+        isPlaying = true
+        if isPlaying == true {
+            choosePosition()
+        }
+    }
+    
     func createHazards() {
         let hazard = SKTexture(imageNamed: "Meteor")
         meteor = SKSpriteNode(texture: hazard, size: CGSize(width: 40, height: 70))
-        let moveDown = SKAction.moveBy(x: 0, y: -hazard.size().height, duration: 3)
+        meteor.position = CGPoint(x: frame.midX, y: frame.maxY)
+        let moveDown = SKAction.moveBy(x: 0, y: -hazard.size().height, duration: 5)
         let moveReset = SKAction.moveBy(x: 0, y: hazard.size().height, duration: 0)
         let moveLoop = SKAction.sequence([moveDown, moveReset])
         let moveDownScreen = SKAction.repeatForever(moveLoop)
@@ -141,7 +172,7 @@ class Level: SKScene, SKPhysicsContactDelegate {
                 turret.position.x = turret.position.x + 50
             }
             if touchedNode.name == "FireButton" {
-                
+                createLaser()
             }
         }
     }
@@ -161,8 +192,5 @@ class Level: SKScene, SKPhysicsContactDelegate {
         }
     }
     override func update(_ currentTime: CFTimeInterval) {
-        if isTouching && moving {
-            
-        }
     }
 }

@@ -74,7 +74,6 @@ class Intro: SKScene {
         scoreText.fontSize = 45
         scoreText.position = CGPoint(x: frame.midX, y: frame.midY - 115)
         scoreText.zPosition = -1
-        scoreText.name = "scoreButton"
         scoreText.fontColor = UIColor.black
         addChild(scoreText)
     }
@@ -95,7 +94,7 @@ class Intro: SKScene {
             if touchedNode.name == "scoreButton" {
                 let scene = Scores(fileNamed: "Scores")
                 let transition = SKTransition.moveIn(with: .left, duration: 3)
-                self.view?.presentScene(scene!, transition: transition)
+                self.view?.presentScene(scene, transition: transition)
             }
         }
     }
