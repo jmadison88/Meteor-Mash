@@ -22,6 +22,8 @@ class Level: SKScene, SKPhysicsContactDelegate {
     var scoreLabel = SKLabelNode()
     var livesLabel = SKLabelNode()
     var points = 0
+    var Lives = SKSpriteNode()
+    var lives = 3
     var isTouching = false
     var moving = false
     var isPlaying = false
@@ -35,6 +37,7 @@ class Level: SKScene, SKPhysicsContactDelegate {
         createEnemies()
         createHazards()
         createTurret()
+       makeLives()
     }
     
     func createBackground() {
@@ -85,9 +88,14 @@ class Level: SKScene, SKPhysicsContactDelegate {
         rightButton.alpha = 0.2
         addChild(rightButton)
     }
-    
+    func updateLabels() {
+        livesLabel.text = "Lives: \(lives)"
+    }
     func createLabels() {
-        
+        livesLabel.fontSize = 18
+        livesLabel.fontColor = .white
+        livesLabel.position = CGPoint(x: frame.minX + 50, y: frame.minY + 18 )
+        addChild(livesLabel)
     }
     
     func createLaser() {
@@ -111,14 +119,25 @@ class Level: SKScene, SKPhysicsContactDelegate {
         turret.physicsBody? .isDynamic = false
         addChild(turret)
     }
+    func makeLives() {
+            let heart =  SKTexture(imageNamed: "Lives")
+            Lives = SKSpriteNode(texture: heart, size: CGSize(width: 50, height: 50))
+            //Lives.setScale(0.5)
+        Lives.position = CGPoint(x:frame.midX, y : frame.midY)
+            Lives.zPosition = -3
+            
+           
+            addChild(Lives)
+              }
     
     func createEnemies() {
         let enemy = SKTexture(imageNamed: "Alien")
         alien = SKSpriteNode(texture: enemy, size: CGSize(width: 50, height: 50))
         addChild(alien)
         aliens.append(alien)
+        
     }
-    
+     
     func choosePosition() {
         let pick = arc4random_uniform(10) + 1
         if pick > 7 {
@@ -138,59 +157,63 @@ class Level: SKScene, SKPhysicsContactDelegate {
         if isPlaying == true {
             choosePosition()
         }
+        
     }
     
-    func createHazards() {
-        let hazard = SKTexture(imageNamed: "Meteor")
-        meteor = SKSpriteNode(texture: hazard, size: CGSize(width: 40, height: 70))
-        meteor.position = CGPoint(x: frame.midX, y: frame.maxY)
-        let moveDown = SKAction.moveBy(x: 0, y: -hazard.size().height, duration: 5)
-        let moveReset = SKAction.moveBy(x: 0, y: hazard.size().height, duration: 0)
-        let moveLoop = SKAction.sequence([moveDown, moveReset])
-        let moveDownScreen = SKAction.repeatForever(moveLoop)
-        meteor.run(moveDownScreen)
-        addChild(meteor)
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for touch in touches {
-            let location = touch.location(in: self)
-            let touchedNode = atPoint(location)
-            if touchedNode.name == "backButton" {
-                let scene = Intro(fileNamed: "Intro")
-                let transition = SKTransition.moveIn(with: .right, duration: 2)
-                self.view?.presentScene(scene!, transition: transition)
-            }
-            if touchedNode.name == "LeftButton" {
-                moving = true
-                isTouching = true
-                turret.position.x = turret.position.x - 50
-            }
-            if touchedNode.name == "RightButton" {
-                moving = true
-                isTouching = true
-                turret.position.x = turret.position.x + 50
-            }
-            if touchedNode.name == "FireButton" {
-                createLaser()
+        
+        
+        func createHazards() {
+            let hazard = SKTexture(imageNamed: "Meteor")
+            meteor = SKSpriteNode(texture: hazard, size: CGSize(width: 40, height: 70))
+            meteor.position = CGPoint(x: frame.midX, y: frame.maxY)
+            let moveDown = SKAction.moveBy(x: 0, y: -hazard.size().height, duration: 5)
+            let moveReset = SKAction.moveBy(x: 0, y: hazard.size().height, duration: 0)
+            let moveLoop = SKAction.sequence([moveDown, moveReset])
+            let moveDownScreen = SKAction.repeatForever(moveLoop)
+            meteor.run(moveDownScreen)
+            addChild(meteor)
+        }
+        
+        override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+            for touch in touches {
+                let location = touch.location(in: self)
+                let touchedNode = atPoint(location)
+                if touchedNode.name == "backButton" {
+                    let scene = Intro(fileNamed: "Intro")
+                    let transition = SKTransition.moveIn(with: .right, duration: 2)
+                    self.view?.presentScene(scene!, transition: transition)
+                }
+                if touchedNode.name == "LeftButton" {
+                    moving = true
+                    isTouching = true
+                    turret.position.x = turret.position.x - 50
+                }
+                if touchedNode.name == "RightButton" {
+                    moving = true
+                    isTouching = true
+                    turret.position.x = turret.position.x + 50
+                }
+                if touchedNode.name == "FireButton" {
+                    createLaser()
+                }
             }
         }
-    }
-    
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for touch in touches {
-            let location = touch.location(in: self)
-            let touchedNode = atPoint(location)
-            if touchedNode.name == "LeftButton"  {
-                moving = false
-                isTouching = false
-            }
-            if touchedNode.name == "RightButton" {
-                moving = false
-                isTouching = false
+        
+        override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+            for touch in touches {
+                let location = touch.location(in: self)
+                let touchedNode = atPoint(location)
+                if touchedNode.name == "LeftButton"  {
+                    moving = false
+                    isTouching = false
+                }
+                if touchedNode.name == "RightButton" {
+                    moving = false
+                    isTouching = false
+                }
             }
         }
+        override func update(_ currentTime: CFTimeInterval) {
+        }
     }
-    override func update(_ currentTime: CFTimeInterval) {
-    }
-}
+
