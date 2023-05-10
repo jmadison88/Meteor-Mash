@@ -21,6 +21,8 @@ class Level: SKScene, SKPhysicsContactDelegate {
     var laser = SKSpriteNode()
     var aliens = [SKSpriteNode]()
     var alien = SKSpriteNode()
+    var alien2 = SKSpriteNode()
+    var alien3 = SKSpriteNode()
     var meteor = SKSpriteNode()
     var backButton = SKSpriteNode()
     var shootButton = SKSpriteNode()
@@ -35,6 +37,7 @@ class Level: SKScene, SKPhysicsContactDelegate {
     var counter = 0
     var counterStartValue = 180
     var counterLabel = SKLabelNode()
+    var lives = 3
     
     override func didMove(to view: SKView) {
         physicsWorld.contactDelegate = self
@@ -47,9 +50,16 @@ class Level: SKScene, SKPhysicsContactDelegate {
         createTurret()
         startTimer()
         decrementCounter()
+        
         run(SKAction.repeatForever(
-            SKAction.sequence([SKAction.run(choosePosition),
+            SKAction.sequence([SKAction.run(choosePositionMeteor),
                 SKAction.run(createHazards),
+                SKAction.wait(forDuration: 3.0)
+                ])
+            ))
+        run(SKAction.repeatForever(
+            SKAction.sequence([SKAction.run(choosePositionEnemies),
+                SKAction.run(createEnemies),
                 SKAction.wait(forDuration: 3.0)
                 ])
             ))
@@ -127,6 +137,7 @@ class Level: SKScene, SKPhysicsContactDelegate {
     
     func updateLabels() {
         counterLabel.text = "Time: \(counter)"
+        livesLabel.text = "Lives: \(lives)"
     }
     
     func createLabels() {
@@ -189,22 +200,54 @@ class Level: SKScene, SKPhysicsContactDelegate {
         let move = SKAction.follow(path.cgPath, asOffset: true, orientToPath: true, speed: 200)
         let moveForever = SKAction.repeatForever(move)
         alien.run(moveForever)
-        addChild(alien)
+        let enemy2 = SKTexture(imageNamed: "Alien")
+        alien2 = SKSpriteNode(texture: enemy2, size: CGSize(width: 50, height: 50))
+        alien2.name = "alien"
+        let path2 = UIBezierPath()
+        path2.move(to: CGPoint(x: 0, y: 0))
+        path2.addLine(to: CGPoint(x: -100, y: 0))
+        path2.addLine(to: CGPoint(x: 100, y: 0))
+        let move2 = SKAction.follow(path.cgPath, asOffset: true, orientToPath: true, speed: 200)
+        let moveForever2 = SKAction.repeatForever(move2)
+        alien2.run(moveForever2)
+        let enemy3 = SKTexture(imageNamed: "Alien")
+        alien3 = SKSpriteNode(texture: enemy3, size: CGSize(width: 50, height: 50))
+        alien3.name = "alien"
+        let path3 = UIBezierPath()
+        path3.move(to: CGPoint(x: 0, y: 0))
+        path3.addLine(to: CGPoint(x: -100, y: 0))
+        path3.addLine(to: CGPoint(x: 100, y: 0))
+        let move3 = SKAction.follow(path.cgPath, asOffset: true, orientToPath: true, speed: 200)
+        let moveForever3 = SKAction.repeatForever(move3)
+        alien3.run(moveForever3)
     }
     
-    func choosePosition() {
+    func choosePositionMeteor() {
         let height = UInt32(self.size.height)
         let width = UInt32(self.size.width)
         let randomPostion = CGPoint(x: Int(arc4random_uniform(width)), y: Int(arc4random_uniform(height)))
         addChild(meteor)
         meteor.position = randomPostion
     }
-    
-    func updateHazard() {
-        isPlaying = true
-        if isPlaying == true {
-            choosePosition()
+    func choosePositionEnemies() {
+        let int1 = Int.random(in: 0...10)
+        if int1 > 7 {
+            alien.position = CGPoint(x: frame.midX - 100, y: frame.midY + 150 )
+            alien2.position = CGPoint(x: frame.midX , y: frame.midY - 160)
+            alien3.position = CGPoint(x: frame.midX + 90, y: frame.midY + 120)
+            
+            
         }
+        else if int1 > 4 {
+            alien.position = CGPoint(x: frame.midX - 130, y: frame.midY + 150)
+            alien2.position = CGPoint( x: frame.midX + 100, y: frame.midY + 150)
+            alien3.position = CGPoint(x: frame.midX  + 95, y: frame.midY + 100)
+        } else {
+            
+        }
+        addChild(alien)
+        addChild(alien2)
+        addChild(alien3)
     }
 
     func createHazards() {
