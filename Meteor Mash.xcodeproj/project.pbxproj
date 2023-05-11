@@ -19,6 +19,8 @@
 		460C2F1D29EEF5EE006B30FC /* Scores.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460C2F1C29EEF5EE006B30FC /* Scores.swift */; };
 		460C2F1F29F81EB7006B30FC /* Move.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460C2F1E29F81EB7006B30FC /* Move.swift */; };
 		460C2F212A0941E7006B30FC /* Winning Screen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460C2F202A0941E7006B30FC /* Winning Screen.swift */; };
+		460C2F232A0A8CF8006B30FC /* LoseScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460C2F222A0A8CF8006B30FC /* LoseScreen.swift */; };
+		460C2F272A0D3446006B30FC /* GameMusic.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 460C2F262A0D3446006B30FC /* GameMusic.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +38,8 @@
 		460C2F1C29EEF5EE006B30FC /* Scores.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scores.swift; sourceTree = "<group>"; };
 		460C2F1E29F81EB7006B30FC /* Move.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Move.swift; sourceTree = "<group>"; };
 		460C2F202A0941E7006B30FC /* Winning Screen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Winning Screen.swift"; sourceTree = "<group>"; };
+		460C2F222A0A8CF8006B30FC /* LoseScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoseScreen.swift; sourceTree = "<group>"; };
+		460C2F262A0D3446006B30FC /* GameMusic.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = GameMusic.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,6 +56,7 @@
 		460C2EE929E87577006B30FC = {
 			isa = PBXGroup;
 			children = (
+				460C2F222A0A8CF8006B30FC /* LoseScreen.swift */,
 				460C2EF429E87578006B30FC /* Meteor Mash */,
 				460C2EF329E87578006B30FC /* Products */,
 			);
@@ -105,6 +110,7 @@
 		460C2F1729ED9CE6006B30FC /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
+				460C2F262A0D3446006B30FC /* GameMusic.mp3 */,
 			);
 			path = Sounds;
 			sourceTree = "<group>";
@@ -169,6 +175,7 @@
 			files = (
 				460C2F0F29ED8C36006B30FC /* Intro.sks in Resources */,
 				460C2F0129E87578006B30FC /* Main.storyboard in Resources */,
+				460C2F272A0D3446006B30FC /* GameMusic.mp3 in Resources */,
 				460C2F1129ED8CCF006B30FC /* Level.sks in Resources */,
 				460C2F0329E8757A006B30FC /* Assets.xcassets in Resources */,
 				460C2F0629E8757A006B30FC /* LaunchScreen.storyboard in Resources */,
@@ -188,6 +195,7 @@
 				460C2F1B29EEF53E006B30FC /* Level.swift in Sources */,
 				460C2F1F29F81EB7006B30FC /* Move.swift in Sources */,
 				460C2F212A0941E7006B30FC /* Winning Screen.swift in Sources */,
+				460C2F232A0A8CF8006B30FC /* LoseScreen.swift in Sources */,
 				460C2EF629E87578006B30FC /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

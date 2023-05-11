@@ -14,7 +14,10 @@ class Level: SKScene, SKPhysicsContactDelegate {
         static let none: UInt32 = 0
         static let meteor: UInt32 = 0b1
         static let laser: UInt32 = 0b10
-        static let turret: UInt32 = 0b10
+        static let alien: UInt32 = 0b1
+        static let alien2: UInt32 = 0b1
+        static let alien3: UInt32 = 0b1
+        static let turret: UInt32 = 0b1
     }
     
     var turret = SKSpriteNode()
@@ -33,11 +36,12 @@ class Level: SKScene, SKPhysicsContactDelegate {
     var isTouching = false
     var moving = false
     var isPlaying = false
+    var lives = 3
+    var points = 0
     var counterTimer = Timer()
     var counter = 0
-    var counterStartValue = 180
+    var counterStartValue = 120
     var counterLabel = SKLabelNode()
-    var lives = 3
     
     override func didMove(to view: SKView) {
         physicsWorld.contactDelegate = self
@@ -46,10 +50,11 @@ class Level: SKScene, SKPhysicsContactDelegate {
         createBackground()
         createButtons()
         createLabels()
-        createEnemies()
         createTurret()
         startTimer()
         decrementCounter()
+        let backgroundSound = SKAudioNode(fileNamed: "GameMusic")
+        self.addChild(backgroundSound)
         
         run(SKAction.repeatForever(
             SKAction.sequence([SKAction.run(choosePositionMeteor),
@@ -63,11 +68,15 @@ class Level: SKScene, SKPhysicsContactDelegate {
                 SKAction.wait(forDuration: 3.0)
                 ])
             ))
+            
+        
+        
+
     }
     
     func winResults() {
-        let scene = WinningScreen(fileNamed: "Winning Screen")
-        let transition = SKTransition.moveIn(with: .right, duration: 2)
+        let scene = WinningScreen(fileNamed: "WinningScreen")
+        let transition = SKTransition.moveIn(with: .left, duration: 2)
         self.view?.presentScene(scene!, transition: transition)
     }
     
@@ -137,18 +146,14 @@ class Level: SKScene, SKPhysicsContactDelegate {
     
     func updateLabels() {
         counterLabel.text = "Time: \(counter)"
-        livesLabel.text = "Lives: \(lives)"
+        scoreLabel.text = "Points: \(points)"
     }
     
     func createLabels() {
-        livesLabel.fontSize = 30
-        livesLabel.fontColor = .white
-        livesLabel.position = CGPoint(x: frame.midX + 350, y: frame.midY + 150)
-        addChild(livesLabel)
         
         scoreLabel.fontSize = 30
         scoreLabel.fontColor = .white
-        scoreLabel.position = CGPoint(x: frame.midX + 350, y: frame.midY + 125)
+        scoreLabel.position = CGPoint(x: frame.midX - 250, y: frame.midY + 125)
         addChild(scoreLabel)
         
         counterLabel.fontSize = 30
@@ -166,6 +171,8 @@ class Level: SKScene, SKPhysicsContactDelegate {
         laser.physicsBody?.restitution = 1
         laser.position = turret.position
         laser.physicsBody?.usesPreciseCollisionDetection = true
+        laser.physicsBody = SKPhysicsBody(rectangleOf: laser.size)
+        laser.physicsBody?.isDynamic = false
         laser.zPosition = -3
         laser.name = "laser"
         let moveUp = SKAction.moveBy(x: 0, y: +greenLaser.size().height, duration: 3)
@@ -173,8 +180,6 @@ class Level: SKScene, SKPhysicsContactDelegate {
         let moveLoop = SKAction.sequence([moveUp, moveReset])
         let moveUpScreen = SKAction.repeatForever(moveLoop)
         laser.run(moveUpScreen)
-        laser.physicsBody = SKPhysicsBody(rectangleOf: laser.size)
-        laser.physicsBody?.isDynamic = false
         addChild(laser)
     }
     
@@ -193,6 +198,11 @@ class Level: SKScene, SKPhysicsContactDelegate {
         let enemy = SKTexture(imageNamed: "Alien")
         alien = SKSpriteNode(texture: enemy, size: CGSize(width: 50, height: 50))
         alien.name = "alien"
+        alien.physicsBody = SKPhysicsBody(rectangleOf: alien.size)
+        alien.physicsBody?.isDynamic = true
+        alien.physicsBody?.categoryBitMask = PhysicsCategory.alien
+        alien.physicsBody?.contactTestBitMask = PhysicsCategory.laser
+        alien.physicsBody?.collisionBitMask = PhysicsCategory.none
         let path = UIBezierPath()
         path.move(to: CGPoint(x: 0, y: 0))
         path.addLine(to: CGPoint(x: -100, y: 0))
@@ -202,7 +212,12 @@ class Level: SKScene, SKPhysicsContactDelegate {
         alien.run(moveForever)
         let enemy2 = SKTexture(imageNamed: "Alien")
         alien2 = SKSpriteNode(texture: enemy2, size: CGSize(width: 50, height: 50))
-        alien2.name = "alien"
+        alien2.name = "alien2"
+        alien2.physicsBody = SKPhysicsBody(rectangleOf: alien.size)
+        alien2.physicsBody?.isDynamic = true
+        alien2.physicsBody?.categoryBitMask = PhysicsCategory.alien2
+        alien2.physicsBody?.contactTestBitMask = PhysicsCategory.laser
+        alien2.physicsBody?.collisionBitMask = PhysicsCategory.none
         let path2 = UIBezierPath()
         path2.move(to: CGPoint(x: 0, y: 0))
         path2.addLine(to: CGPoint(x: -100, y: 0))
@@ -212,7 +227,12 @@ class Level: SKScene, SKPhysicsContactDelegate {
         alien2.run(moveForever2)
         let enemy3 = SKTexture(imageNamed: "Alien")
         alien3 = SKSpriteNode(texture: enemy3, size: CGSize(width: 50, height: 50))
-        alien3.name = "alien"
+        alien3.name = "alien3"
+        alien3.physicsBody = SKPhysicsBody(rectangleOf: alien.size)
+        alien3.physicsBody?.isDynamic = true
+        alien3.physicsBody?.categoryBitMask = PhysicsCategory.alien3
+        alien3.physicsBody?.contactTestBitMask = PhysicsCategory.laser
+        alien3.physicsBody?.collisionBitMask = PhysicsCategory.none
         let path3 = UIBezierPath()
         path3.move(to: CGPoint(x: 0, y: 0))
         path3.addLine(to: CGPoint(x: -100, y: 0))
@@ -226,14 +246,14 @@ class Level: SKScene, SKPhysicsContactDelegate {
         let height = UInt32(self.size.height)
         let width = UInt32(self.size.width)
         let randomPostion = CGPoint(x: Int(arc4random_uniform(width)), y: Int(arc4random_uniform(height)))
-        addChild(meteor)
         meteor.position = randomPostion
+        addChild(meteor)
     }
     func choosePositionEnemies() {
         let int1 = Int.random(in: 0...10)
         if int1 > 7 {
             alien.position = CGPoint(x: frame.midX - 100, y: frame.midY + 150 )
-            alien2.position = CGPoint(x: frame.midX , y: frame.midY - 160)
+            alien2.position = CGPoint(x: frame.midX , y: frame.midY - 10)
             alien3.position = CGPoint(x: frame.midX + 90, y: frame.midY + 120)
             
             
@@ -249,7 +269,7 @@ class Level: SKScene, SKPhysicsContactDelegate {
         addChild(alien2)
         addChild(alien3)
     }
-
+    
     func createHazards() {
         let hazard = SKTexture(imageNamed: "Meteor")
         meteor = SKSpriteNode(texture: hazard, size: CGSize(width: 40, height: 70))
@@ -258,7 +278,6 @@ class Level: SKScene, SKPhysicsContactDelegate {
         meteor.physicsBody?.isDynamic = true
         meteor.physicsBody?.categoryBitMask = PhysicsCategory.meteor
         meteor.physicsBody?.contactTestBitMask = PhysicsCategory.laser
-        meteor.physicsBody?.contactTestBitMask = PhysicsCategory.turret
         meteor.physicsBody?.collisionBitMask = PhysicsCategory.none
         meteor.zPosition = -3
         let moveDown = SKAction.moveBy(x: 0, y: -hazard.size().height, duration: 4)
@@ -306,34 +325,65 @@ class Level: SKScene, SKPhysicsContactDelegate {
         if contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask {
             firstBody = contact.bodyA
             secondBody = contact.bodyB
-          } else {
+        } else {
             firstBody = contact.bodyB
             secondBody = contact.bodyA
-          }
+        }
         if ((firstBody.categoryBitMask & PhysicsCategory.meteor != 0) &&
-              (secondBody.categoryBitMask & PhysicsCategory.laser != 0)) {
+            (secondBody.categoryBitMask & PhysicsCategory.laser != 0)) {
             if let meteor = firstBody.node as? SKSpriteNode,
-              let laser = secondBody.node as? SKSpriteNode {
-              laserCollision(laser: laser, meteor: meteor)
+               let laser = secondBody.node as? SKSpriteNode {
+                laserCollision(laser: laser, meteor: meteor)
             }
-          }
+        }
+        else if ((firstBody.categoryBitMask & PhysicsCategory.alien != 0) &&
+                 (secondBody.categoryBitMask & PhysicsCategory.laser != 0)) {
+            if let alien = firstBody.node as? SKSpriteNode,
+               let laser = secondBody.node as? SKSpriteNode {
+                laserCollisionAlien(laser: laser, alien: alien, alien2: alien, alien3: alien)
+            }
+        }
+        else if ((firstBody.categoryBitMask & PhysicsCategory.meteor != 0) &&
+                 (secondBody.categoryBitMask & PhysicsCategory.turret != 0)) {
+            if let meteor = firstBody.node as? SKSpriteNode,
+               let turret = secondBody.node as? SKSpriteNode {
+                meteorCollision(turret: turret, meteor: meteor)
+            }
+        }
     }
     
     override func update(_ currentTime: CFTimeInterval) {
         updateLabels()
         if counter == 0 {
-            winResults()
+            backToIntro()
         }
-        if ((turret.parent) != nil) {
+        if lives == 0 {
+            backToIntro()
+        }
+        if (turret.parent != nil) {
             
         } else {
             backToIntro()
         }
     }
     
+    func meteorCollision(turret: SKSpriteNode, meteor: SKSpriteNode) {
+    }
+    
     func laserCollision(laser: SKSpriteNode, meteor: SKSpriteNode) {
         print("Contact!")
         laser.removeFromParent()
         meteor.removeFromParent()
+        points += 100
+    }
+    
+    func laserCollisionAlien(laser: SKSpriteNode, alien: SKSpriteNode, alien2: SKSpriteNode, alien3: SKSpriteNode) {
+        print("Contact!")
+        laser.removeFromParent()
+        alien.removeFromParent()
+        alien2.removeFromParent()
+        alien3.removeFromParent()
+        points += 50
+        
     }
 }

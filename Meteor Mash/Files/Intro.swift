@@ -20,7 +20,8 @@ class Intro: SKScene {
         createBackground()
         createLabels()
         createButtons()
-        playMusic()
+        let backgroundSound = SKAudioNode(fileNamed: "GameMusic")
+        self.addChild(backgroundSound)
     }
     
     func createBackground() {
@@ -49,7 +50,6 @@ class Intro: SKScene {
         scoreButton.position = CGPoint(x: frame.midX, y: frame.midY - 100)
         scoreButton.name = "scoreButton"
         scoreButton.zPosition = -2
-        addChild(scoreButton)
         
     }
     
@@ -75,11 +75,7 @@ class Intro: SKScene {
         scoreText.position = CGPoint(x: frame.midX, y: frame.midY - 115)
         scoreText.zPosition = -1
         scoreText.fontColor = UIColor.black
-        addChild(scoreText)
-    }
-    
-    func playMusic() {
-        
+        scoreText.name = "scoreButton"
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -91,11 +87,7 @@ class Intro: SKScene {
                 let transition = SKTransition.moveIn(with: .right, duration: 3)
                 self.view?.presentScene(scene!, transition: transition)
             }
-            if touchedNode.name == "scoreButton" {
-                let scene = Scores(fileNamed: "Scores")
-                    let transition = SKTransition.moveIn(with: .left, duration: 3)
-                    self.view?.presentScene(scene!, transition: transition)
-                }
+        
             }
         }
     }
